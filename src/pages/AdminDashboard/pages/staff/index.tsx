@@ -361,6 +361,32 @@ function StatCard({
   );
 }
 
+function AdminAvatar({ admin }: { admin: AdminUser }) {
+  const [error, setError] = useState(false);
+  const photo = admin.photo?.trim();
+  const isValid = photo && photo !== "[object Object]" && photo !== "undefined" && photo !== "null" && !error;
+  
+  if (isValid) {
+    return (
+      <img
+        src={photo as string}
+        alt={getName(admin)}
+        width={48}
+        height={48}
+        onError={() => setError(true)}
+        className="h-12 w-12 rounded-full border-2 border-(--card-border) object-cover"
+      />
+    );
+  }
+  
+  const initial = getName(admin).charAt(0).toUpperCase();
+  return (
+    <div className="h-12 w-12 rounded-full border-2 border-(--card-border) bg-[#1F2B6C] flex items-center justify-center text-white font-bold text-lg">
+      {initial}
+    </div>
+  );
+}
+
 function AdminCard({
   admin,
   isPending,
@@ -398,13 +424,7 @@ function AdminCard({
             )}
           </div>
           <div className="relative shrink-0">
-            <img
-              src={admin.photo?.trim() || "/images/blank-profile-picture.png"}
-              alt={getName(admin)}
-              width={48}
-              height={48}
-              className="h-12 w-12 rounded-full border-2 border-(--card-border) object-cover"
-            />
+            <AdminAvatar admin={admin} />
             {admin.is_active && (
               <span className="absolute bottom-0 left-0 h-3 w-3 rounded-full border-2 border-white bg-green-500" />
             )}

@@ -189,16 +189,12 @@ export default function AdminNotificationsPage() {
                 notification.read ? "opacity-70" : "bg-(--semi-card-bg)"
               }`}
             >
-              <div className="relative">
-                <img
-                  src="/images/blank-profile-picture.png"
-                  alt="Notification"
-                  width={44}
-                  height={44}
-                  className="rounded-full"
-                />
+              <div className="relative flex-shrink-0">
+                <div className="w-11 h-11 rounded-full bg-[#e7edf3] flex items-center justify-center text-lg font-semibold text-[#1f6feb]">
+                  {notification.title?.[0] || "N"}
+                </div>
                 {!notification.read && (
-                  <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-indigo-500 rounded-full ring-2 ring-white dark:ring-slate-900" />
+                  <span className="absolute top-0 right-0 w-3 h-3 bg-indigo-500 rounded-full ring-2 ring-white dark:ring-slate-900" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
