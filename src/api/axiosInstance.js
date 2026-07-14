@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
+// Use empty baseURL so all requests go through Vite's proxy (/api → backend)
+// This ensures auth cookies are always forwarded correctly.
+// The actual backend target is configured in vite.config.js proxy settings.
 const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: '',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
