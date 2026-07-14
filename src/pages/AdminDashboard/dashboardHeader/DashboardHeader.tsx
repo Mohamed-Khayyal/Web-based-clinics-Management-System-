@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { Calendar } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css"
+import "react-day-picker/style.css"
 import { useLocale } from "@/lib/hooks";
 import { t } from "@/i18n";
 

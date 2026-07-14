@@ -8,6 +8,48 @@ import { useAuth } from "../context/AuthContext";
 import logo from "../assets/Logo1.png";
 import register from "../assets/register.webp";
 
+const SPECIALTIES = [
+  "مخ واعصاب",
+  "عظام",
+  "الأورام",
+  "طب الأذن والأنف والحنجرة",
+  "طب العيون",
+  "قلب و اوعية دموية",
+  "صدر و جهاز تنفسي",
+  "كلى",
+  "اسنان",
+  "اطفال و حديثي الولادة",
+  "جلدية",
+  "نسا و توليد",
+];
+
+function getSpecialistLabel(specialist, t) {
+  if (!specialist) return "-";
+  const arSpecialties = {
+    neurology: 'مخ واعصاب',
+    orthopedics: 'عظام',
+    oncology: 'الأورام',
+    ent: 'طب الأذن والأنف والحنجرة',
+    ophthalmology: 'طب العيون',
+    cardiology: 'قلب و اوعية دموية',
+    pulmonology: 'صدر و جهاز تنفسي',
+    nephrology: 'كلى',
+    dentistry: 'اسنان',
+    pediatrics: 'اطفال و حديثي الولادة',
+    dermatology: 'جلدية',
+    gynecology: 'نسا و توليد'
+  };
+
+  const key = Object.keys(arSpecialties).find(k => arSpecialties[k] === specialist);
+  if (key) {
+    const translationKey = `register.${key}`;
+    const translated = t(translationKey);
+    // If translation doesn't exist, i18next usually returns the key itself
+    if (translated !== translationKey) return translated;
+  }
+  return specialist;
+}
+
 export default function CreateAccount() {
   const [role, setRole] = useState("patient");
   const [showPassword, setShowPassword] = useState(false);
@@ -189,13 +231,11 @@ export default function CreateAccount() {
                   }`}
                 >
                   <option value="">{t("register.chooseSpecialization")}</option>
-                  <option value="cardiology">{t("register.cardiology")}</option>
-                  <option value="dermatology">{t("register.dermatology")}</option>
-                  <option value="neurology">{t("register.neurology")}</option>
-                  <option value="pediatrics">{t("register.pediatrics")}</option>
-                  <option value="psychiatry">{t("register.psychiatry")}</option>
-                  <option value="radiology">{t("register.radiology")}</option>
-                  <option value="surgery">{t("register.surgery")}</option>
+                  {SPECIALTIES.map((s) => (
+                    <option key={s} value={s}>
+                      {getSpecialistLabel(s, t)}
+                    </option>
+                  ))}
                 </select>
                 {formik.touched.specialist && formik.errors.specialist && (
                   <span className="text-red-500 text-xs">

@@ -20,11 +20,13 @@
     "lucide-react": "^1.21.0",
     "lucide-static": "^1.22.0",
     "react": "^19.2.6",
+    "react-day-picker": "^10.0.1",
     "react-dom": "^19.2.6",
     "react-i18next": "^17.0.8",
     "react-icons": "^5.7.0",
     "react-router-dom": "^7.18.0",
     "recharts": "^3.9.2",
+    "sweetalert2": "^11.26.25",
     "swiper": "^14.0.1",
     "yup": "^1.7.1"
   },
