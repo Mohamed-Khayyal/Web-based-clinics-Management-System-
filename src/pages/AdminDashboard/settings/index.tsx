@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import Swal from "sweetalert2";
+import axiosInstance from "@/api/axiosInstance";
 
 export default function AdminSettingsPage() {
   const { user, loading, updateUser } = useAuth();
@@ -100,17 +101,11 @@ export default function AdminSettingsPage() {
         formData.append("photo", photoFile);
       }
 
-      const response = await fetch("/api/user/me", {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${user?.token || ""}`,
-        },
-        body: formData,
-      });
+      const response = await axiosInstance.patch("/api/user/me", formData);
 
-      const result = await response.json();
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || "فشل تحديث الملف الشخصي");
+      const result = response.data;
+      if (result.success === false || result.status === "error" || result.status === "fail") {
+        throw new Error(result.error || result.message || "فشل تحديث الملف الشخصي");
       }
 
       // Extract the Cloudinary photo URL returned from backend
@@ -147,7 +142,7 @@ export default function AdminSettingsPage() {
       Swal.fire({
         icon: "error",
         title: "فشل التحديث",
-        text: err.message || "حدث خطأ أثناء تحديث بياناتك",
+        text: err.response?.data?.error || err.response?.data?.message || err.message || "حدث خطأ أثناء تحديث بياناتك",
         confirmButtonText: "موافق",
       });
     } finally {
@@ -190,22 +185,15 @@ export default function AdminSettingsPage() {
 
     try {
       setPasswordUpdating(true);
-      const response = await fetch("/api/user/change-password", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user?.token || ""}`,
-        },
-        body: JSON.stringify({
-          current_password: currentPassword,
-          new_password: newPassword,
-          confirm_password: confirmPassword,
-        }),
+      const response = await axiosInstance.patch("/api/user/change-password", {
+        current_password: currentPassword,
+        new_password: newPassword,
+        confirm_password: confirmPassword,
       });
 
-      const result = await response.json();
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || "فشل تغيير كلمة المرور");
+      const result = response.data;
+      if (result.success === false || result.status === "error" || result.status === "fail") {
+        throw new Error(result.error || result.message || "فشل تغيير كلمة المرور");
       }
 
       Swal.fire({
@@ -222,7 +210,7 @@ export default function AdminSettingsPage() {
       Swal.fire({
         icon: "error",
         title: "فشل التغيير",
-        text: err.message || "حدث خطأ أثناء تغيير كلمة المرور",
+        text: err.response?.data?.error || err.response?.data?.message || err.message || "حدث خطأ أثناء تغيير كلمة المرور",
         confirmButtonText: "موافق",
       });
     } finally {
@@ -258,22 +246,15 @@ export default function AdminSettingsPage() {
     try {
       setAdminCreating(true);
 
-      const response = await fetch("/api/admin/create-admin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user?.token || ""}`,
-        },
-        body: JSON.stringify({
-          full_name: newAdminName.trim(),
-          email: newAdminEmail.trim().toLowerCase(),
-          password: newAdminPassword,
-        }),
+      const response = await axiosInstance.post("/api/admin/create-admin", {
+        full_name: newAdminName.trim(),
+        email: newAdminEmail.trim().toLowerCase(),
+        password: newAdminPassword,
       });
 
-      const result = await response.json();
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || "فشل إنشاء حساب المدير");
+      const result = response.data;
+      if (result.success === false || result.status === "error" || result.status === "fail") {
+        throw new Error(result.error || result.message || "فشل إنشاء حساب المدير");
       }
 
       Swal.fire({
@@ -291,7 +272,7 @@ export default function AdminSettingsPage() {
       Swal.fire({
         icon: "error",
         title: "فشل الإنشاء",
-        text: err.message || "حدث خطأ أثناء إنشاء حساب المدير",
+        text: err.response?.data?.error || err.response?.data?.message || err.message || "حدث خطأ أثناء إنشاء حساب المدير",
         confirmButtonText: "موافق",
       });
     } finally {
